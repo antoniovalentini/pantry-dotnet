@@ -13,8 +13,7 @@ namespace Pantry.Core
         /// <summary>
         /// Creates a new <see cref="ApiClient"/> instance with the provided configuration.
         /// </summary>
-        /// <param name="settings">.</param>
-        public ApiClient(PantrySettings settings)
+        public ApiClient()
         {
             _serializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             _httpClient = new HttpClient { BaseAddress = new Uri(PantrySettings.ApiBaseUrl) };
@@ -41,6 +40,16 @@ namespace Pantry.Core
             if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task DeleteAsync(string path)
+        {
+            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
+
+            var response = await _httpClient.DeleteAsync(path);
+            if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
+
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
         }
     }
 }

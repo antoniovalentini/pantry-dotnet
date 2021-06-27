@@ -31,5 +31,13 @@ namespace Pantry.Core.Baskets
 
             await _apiClient.PostAsync($"{pantryId}/basket/{basketName}", httpContent);
         }
+
+        public async Task DeleteBasket(string pantryId, string basketName)
+        {
+            if (string.IsNullOrWhiteSpace(basketName))
+                throw new ArgumentNullException(nameof(basketName));
+
+            await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
+        }
     }
 }

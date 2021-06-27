@@ -7,5 +7,6 @@ namespace Pantry.Core
     {
         Task<TResult> GetAsync<TResult>(string path);
         Task<string> PostAsync(string path, HttpContent httpContent);
+        Task DeleteAsync(string path);
     }
 }

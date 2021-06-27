@@ -1,32 +1,31 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Pantry.Core.Baskets;
 using Xunit;
 
 namespace Pantry.Core.E2ETests.Baskets
 {
-    public class BasketsClientTests
+    public class BasketsClientTests : IClassFixture<TestContext>
     {
-        private readonly PantryTestSettings _testSettings;
-        private readonly ApiClient _apiclient;
+        private readonly TestContext _testContext;
 
-        public BasketsClientTests()
+        public BasketsClientTests(TestContext testContext)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json", false)
-                .Build();
-
-            _testSettings = config.GetSection("Pantry").Get<PantryTestSettings>();
-            _apiclient = new ApiClient(new PantrySettings());
+            _testContext = testContext;
         }
 
         [Fact]
         public async Task CreateBasket_ShouldSucceed()
         {
-            var client = new BasketsClient(_apiclient);
             var ex = await Record.ExceptionAsync(
-                    async () => await client.CreateBasket(_testSettings.Id, "test3-basket", new TestObject())
+                    async () => await _testContext.Client.CreateBasket(_testContext.TestSettings.Id, TestContext.CreateBasketName, new TestObject())
                 );
+            Assert.Null(ex);
+        }
+
+        [Fact]
+        public async Task DeleteBasket_ShouldSucceed()
+        {
+            await _testContext.Client.CreateBasket(_testContext.TestSettings.Id, TestContext.DeleteBasketName, new TestObject());
+            var ex = await Record.ExceptionAsync(async () => await _testContext.Client.DeleteBasket(_testContext.TestSettings.Id, TestContext.DeleteBasketName));
             Assert.Null(ex);
         }
     }

@@ -17,7 +17,7 @@ namespace Pantry.Core.E2ETests.Pantry
                 .Build();
 
             _testSettings = config.GetSection("Pantry").Get<PantryTestSettings>();
-            _apiclient = new ApiClient(new PantrySettings());
+            _apiclient = new ApiClient();
         }
 
         [Fact]
