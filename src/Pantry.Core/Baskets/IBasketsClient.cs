@@ -4,6 +4,6 @@ namespace Pantry.Core.Baskets
 {
     public interface IBasketsClient
     {
-        Task CreateBasket(string basketName, object basketContent);
+        Task CreateBasket(string pantryId, string basketName, object basketContent);
     }
 }

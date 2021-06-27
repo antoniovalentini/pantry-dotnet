@@ -5,6 +5,6 @@ namespace Pantry.Core.Pantries
 {
     public interface IPantriesClient
     {
-        Task<GetPantryResponse> GetPantry();
+        Task<GetPantryResponse> GetPantry(string pantryId);
     }
 }

@@ -7,7 +7,6 @@ namespace Pantry.Core.E2ETests.Pantry
 {
     public class PantryClientTests
     {
-        private readonly PantrySettings _pantrySettings;
         private readonly PantryTestSettings _testSettings;
         private readonly ApiClient _apiclient;
 
@@ -18,15 +17,14 @@ namespace Pantry.Core.E2ETests.Pantry
                 .Build();
 
             _testSettings = config.GetSection("Pantry").Get<PantryTestSettings>();
-            _pantrySettings = new PantrySettings {PantryId = _testSettings.Id};
-            _apiclient = new ApiClient(_pantrySettings);
+            _apiclient = new ApiClient(new PantrySettings());
         }
 
         [Fact]
         public async Task GetPantry_ShouldSucceed()
         {
-            var client = new PantriesClient(_apiclient, _pantrySettings);
-            var pantry = await client.GetPantry();
+            var client = new PantriesClient(_apiclient);
+            var pantry = await client.GetPantry(_testSettings.Id);
             Assert.NotNull(pantry);
             Assert.Equal(_testSettings.Name, pantry.Name);
             Assert.Equal(_testSettings.Description, pantry.Description);

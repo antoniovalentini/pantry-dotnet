@@ -13,15 +13,13 @@ namespace Pantry.Core.Baskets
     public class BasketsClient : IBasketsClient
     {
         private readonly IApiClient _apiClient;
-        private readonly PantrySettings _settings;
 
-        public BasketsClient(IApiClient apiClient, PantrySettings settings)
+        public BasketsClient(IApiClient apiClient)
         {
             _apiClient = apiClient;
-            _settings = settings;
         }
 
-        public async Task CreateBasket(string basketName, object basketContent)
+        public async Task CreateBasket(string pantryId, string basketName, object basketContent)
         {
             if (string.IsNullOrWhiteSpace(basketName))
                 throw new ArgumentNullException(nameof(basketName));
@@ -31,7 +29,7 @@ namespace Pantry.Core.Baskets
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
 
-            await _apiClient.PostAsync($"{_settings.PantryId}/basket/{basketName}", httpContent);
+            await _apiClient.PostAsync($"{pantryId}/basket/{basketName}", httpContent);
         }
     }
 }
