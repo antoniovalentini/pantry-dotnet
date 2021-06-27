@@ -1,17 +1,17 @@
-﻿using Pantry.Core.Pantry.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Pantry.Core.Pantries.Models;
 
-namespace Pantry.Core.Pantry
+namespace Pantry.Core.Pantries
 {
     /// <summary>
-    /// Default implementation of <see cref="IPantryClient"/>.
+    /// Default implementation of <see cref="IPantriesClient"/>.
     /// </summary>
-    public class PantryClient : IPantryClient
+    public class PantriesClient : IPantriesClient
     {
         private readonly IApiClient _apiclient;
         private readonly PantrySettings _settings;
 
-        public PantryClient(IApiClient apiclient, PantrySettings settings)
+        public PantriesClient(IApiClient apiclient, PantrySettings settings)
         {
             _apiclient = apiclient;
             _settings = settings;

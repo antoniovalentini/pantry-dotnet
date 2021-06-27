@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pantry.Core.Pantry.Models
+namespace Pantry.Core.Pantries.Models
 {
     public class GetPantryResponse
     {

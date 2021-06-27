@@ -1,4 +1,4 @@
-﻿using Pantry.Core.Pantry;
+﻿using Pantry.Core.Pantries;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -25,7 +25,7 @@ namespace Pantry.Core.E2ETests.Pantry
         [Fact]
         public async Task GetPantry_ShouldSucceed()
         {
-            var client = new PantryClient(_apiclient, _pantrySettings);
+            var client = new PantriesClient(_apiclient, _pantrySettings);
             var pantry = await client.GetPantry();
             Assert.NotNull(pantry);
             Assert.Equal(_testSettings.Name, pantry.Name);
