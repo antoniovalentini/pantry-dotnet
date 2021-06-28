@@ -22,4 +22,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+      env:
+        PANTRY__ID: ${{ secrets.PANTRYID }}
+        PANTRY__NAME: ${{ secrets.PANTRYNAME }}
+        PANTRY__DESC: ${{ secrets.PANTRYDESC }}
       run: dotnet test --no-build --verbosity normal
