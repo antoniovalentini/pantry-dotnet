@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Pantry.Core.Baskets;
 using Xunit;
 
@@ -14,11 +13,7 @@ namespace Pantry.Core.E2ETests.Baskets
 
         public TestContext()
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json", false)
-                .Build();
-
-            TestSettings = config.GetSection("Pantry").Get<PantryTestSettings>();
+            TestSettings = TestHelpers.GetTestSettings();
             Client = new BasketsClient(new ApiClient());
         }
 

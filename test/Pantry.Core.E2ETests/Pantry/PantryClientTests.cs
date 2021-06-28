@@ -1,6 +1,5 @@
 ﻿using Pantry.Core.Pantries;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace Pantry.Core.E2ETests.Pantry
@@ -12,11 +11,7 @@ namespace Pantry.Core.E2ETests.Pantry
 
         public PantryClientTests()
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json", false)
-                .Build();
-
-            _testSettings = config.GetSection("Pantry").Get<PantryTestSettings>();
+            _testSettings = TestHelpers.GetTestSettings();
             _apiclient = new ApiClient();
         }
 
