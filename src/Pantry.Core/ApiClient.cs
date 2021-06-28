@@ -48,8 +48,6 @@ namespace Pantry.Core
 
             var response = await _httpClient.DeleteAsync(path);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
-
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
         }
     }
 }
