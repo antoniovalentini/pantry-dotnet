@@ -32,14 +32,12 @@ namespace Pantry.Core
                 : default;
         }
 
-        public async Task<string> PostAsync(string path, HttpContent httpContent)
+        public async Task PostAsync(string path, HttpContent httpContent)
         {
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
 
             var response = await _httpClient.PostAsync(path, httpContent);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
-
-            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task DeleteAsync(string path)

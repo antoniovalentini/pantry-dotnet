@@ -6,7 +6,7 @@ namespace Pantry.Core
     public interface IApiClient
     {
         Task<TResult> GetAsync<TResult>(string path);
-        Task<string> PostAsync(string path, HttpContent httpContent);
+        Task PostAsync(string path, HttpContent httpContent);
         Task DeleteAsync(string path);
     }
 }
