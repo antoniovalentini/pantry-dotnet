@@ -11,21 +11,22 @@ namespace Pantry.Core.E2ETests
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
-                .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.test.json", true)
+                .AddEnvironmentVariables()
                 .Build();
 
             var settings = config.GetSection("Pantry").Get<PantryTestSettings>() ?? new PantryTestSettings();
 
             if (string.IsNullOrWhiteSpace(settings.Id))
-                settings.Id = Environment.GetEnvironmentVariable("PANTRY__ID");
+                throw new ArgumentException(nameof(settings.Id));
 
             if (string.IsNullOrWhiteSpace(settings.Name))
-                settings.Name = Environment.GetEnvironmentVariable("PANTRY__NAME");
+                throw new ArgumentException(nameof(settings.Name));
 
             if (string.IsNullOrWhiteSpace(settings.Description))
-                settings.Description = Environment.GetEnvironmentVariable("PANTRY__DESC");
+                throw new ArgumentException(nameof(settings.Description));
 
+            Console.WriteLine(settings.Id);
             return settings;
         }
     }

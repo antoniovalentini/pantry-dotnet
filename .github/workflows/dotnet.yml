@@ -25,5 +25,5 @@ jobs:
       env:
         PANTRY__ID: ${{ secrets.PANTRYID }}
         PANTRY__NAME: ${{ secrets.PANTRYNAME }}
-        PANTRY__DESC: ${{ secrets.PANTRYDESC }}
+        PANTRY__DESCRIPTION: ${{ secrets.PANTRYDESC }}
       run: dotnet test --no-build --verbosity normal
