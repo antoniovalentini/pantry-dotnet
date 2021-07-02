@@ -1,32 +1,37 @@
-﻿using System.Threading.Tasks;
-using Pantry.Core.Baskets;
-using Xunit;
+﻿using Pantry.Core.Baskets;
 
 namespace Pantry.Core.E2ETests.Baskets
 {
-    public class TestContext : IAsyncLifetime
+    public class TestContext
     {
         public readonly PantryTestSettings TestSettings;
         public readonly BasketsClient Client;
         public const string DeleteBasketName = "delete-me";
         public const string CreateBasketName = "create-me";
+        public const string PermanentBasketName = "permanent-basket";
+        public const string UpdateBasketName = "update-basket";
 
         public TestContext()
         {
             TestSettings = TestHelpers.GetTestSettings();
             Client = new BasketsClient(new ApiClient());
         }
+    }
 
-        public async Task InitializeAsync()
+    public class TestObject
+    {
+        public static TestObject CreateDefault() => new TestObject
         {
-            // create the to-be-deleted one
-            await Client.CreateBasket(TestSettings.Id, DeleteBasketName, new TestObject());
-        }
+            TestProp1 = "foo",
+            TestProp2 = "bar",
+        };
 
-        public async Task DisposeAsync()
-        {
-            // delete the already-created one
-            await Client.DeleteBasket(TestSettings.Id, CreateBasketName);
-        }
+        public string TestProp1 { get; set; }
+        public string TestProp2 { get; set; }
+    }
+
+    public class TestObjectSmall
+    {
+        public string TestProp1 { get; set; }
     }
 }

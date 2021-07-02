@@ -8,33 +8,29 @@ namespace Pantry.Core
     public class ApiClient : IApiClient
     {
         private readonly HttpClient _httpClient;
-        private readonly JsonSerializerOptions _serializerOptions;
 
         /// <summary>
         /// Creates a new <see cref="ApiClient"/> instance with the provided configuration.
         /// </summary>
         public ApiClient()
         {
-            _serializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             _httpClient = new HttpClient { BaseAddress = new Uri(PantrySettings.ApiBaseUrl) };
         }
 
-        public async Task<TResult> GetAsync<TResult>(string path)
+        public async Task<TResult> GetAsync<TResult>(string path, JsonSerializerOptions serializerOptions = null)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
+            path.ThrowIfNullOrWhiteSpace();
 
             var response = await _httpClient.GetAsync(path);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error getting the pantry: {response.StatusCode}");
 
             var json = await response.Content.ReadAsStringAsync();
-            return !string.IsNullOrWhiteSpace(json)
-                ? JsonSerializer.Deserialize<TResult>(json, _serializerOptions)
-                : default;
+            return DeserializeAsync<TResult>(json, serializerOptions);
         }
 
         public async Task PostAsync(string path, HttpContent httpContent)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
+            path.ThrowIfNullOrWhiteSpace();
 
             var response = await _httpClient.PostAsync(path, httpContent);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
@@ -45,7 +41,29 @@ namespace Pantry.Core
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
 
             var response = await _httpClient.DeleteAsync(path);
-            if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
+            if (!response.IsSuccessStatusCode) throw new Exception($"Error deleting the pantry: {response.StatusCode}");
+        }
+
+        public async Task<TResult> PutAsync<TResult>(string path, HttpContent httpContent)
+        {
+            path.ThrowIfNullOrWhiteSpace();
+            var response = await _httpClient.PutAsync(path, httpContent);
+            if (!response.IsSuccessStatusCode) throw new Exception($"Error updating the pantry: {response.StatusCode}");
+
+            var json = await response.Content.ReadAsStringAsync();
+            return DeserializeAsync<TResult>(json);
+
+        }
+
+        private static T DeserializeAsync<T>(string json, JsonSerializerOptions serializerOptions = null)
+        {
+            json.ThrowIfNullOrWhiteSpace();
+
+            var result = serializerOptions is null
+                ? JsonSerializer.Deserialize<T>(json)
+                : JsonSerializer.Deserialize<T>(json, serializerOptions);
+
+            return result ?? default;
         }
     }
 }

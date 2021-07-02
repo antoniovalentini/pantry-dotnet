@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Pantry.Core.Pantries.Models;
 
 namespace Pantry.Core.Pantries
@@ -17,7 +18,7 @@ namespace Pantry.Core.Pantries
 
         public async Task<GetPantryResponse> GetPantry(string pantryId)
         {
-            return await _apiclient.GetAsync<GetPantryResponse>(pantryId);
+            return await _apiclient.GetAsync<GetPantryResponse>(pantryId, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
         }
     }
 }
