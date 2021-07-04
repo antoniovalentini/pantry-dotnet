@@ -1,4 +1,6 @@
-﻿using Pantry.Core.Baskets;
+﻿using System;
+using System.Net.Http;
+using Pantry.Core.Baskets;
 
 namespace Pantry.Core.E2ETests.Baskets
 {
@@ -14,7 +16,7 @@ namespace Pantry.Core.E2ETests.Baskets
         public TestContext()
         {
             TestSettings = TestHelpers.GetTestSettings();
-            Client = new BasketsClient(new ApiClient(new DefaultHttpClientFactory()));
+            Client = new BasketsClient(new ApiClient(new HttpClient {BaseAddress = new Uri(PantrySettings.ApiBaseUrl)}));
         }
     }
 

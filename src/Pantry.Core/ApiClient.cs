@@ -12,9 +12,9 @@ namespace Pantry.Core
         /// <summary>
         /// Creates a new <see cref="ApiClient"/> instance with the provided configuration.
         /// </summary>
-        public ApiClient(IHttpClientFactory factory)
+        public ApiClient(HttpClient httpClient)
         {
-            _httpClient = factory.CreateClient(nameof(ApiClient));
+            _httpClient = httpClient;
         }
 
         public async Task<TResult> GetAsync<TResult>(string path, JsonSerializerOptions serializerOptions = null)

@@ -1,4 +1,6 @@
-﻿using Pantry.Core.Pantries;
+﻿using System;
+using System.Net.Http;
+using Pantry.Core.Pantries;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,7 +14,7 @@ namespace Pantry.Core.E2ETests.Pantry
         public PantryClientTests()
         {
             _testSettings = TestHelpers.GetTestSettings();
-            _apiclient = new ApiClient(new DefaultHttpClientFactory());
+            _apiclient = new ApiClient(new HttpClient {BaseAddress = new Uri(PantrySettings.ApiBaseUrl)});
         }
 
         [Fact]
