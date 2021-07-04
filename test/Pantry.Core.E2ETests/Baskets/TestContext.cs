@@ -14,7 +14,7 @@ namespace Pantry.Core.E2ETests.Baskets
         public TestContext()
         {
             TestSettings = TestHelpers.GetTestSettings();
-            Client = new BasketsClient(new ApiClient());
+            Client = new BasketsClient(new ApiClient(new DefaultHttpClientFactory()));
         }
     }
 

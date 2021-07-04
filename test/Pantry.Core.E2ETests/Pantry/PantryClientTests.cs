@@ -12,7 +12,7 @@ namespace Pantry.Core.E2ETests.Pantry
         public PantryClientTests()
         {
             _testSettings = TestHelpers.GetTestSettings();
-            _apiclient = new ApiClient();
+            _apiclient = new ApiClient(new DefaultHttpClientFactory());
         }
 
         [Fact]

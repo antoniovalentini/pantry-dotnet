@@ -1,0 +1,96 @@
+﻿@page "/"
+
+@using Pantry.Core
+@using Microsoft.Extensions.Configuration
+@inject IPantryClient _pantryClient
+@inject NavigationManager _uriHelper;
+@inject IConfiguration _configuration;
+
+<h1>Pantry</h1>
+
+<p>This component demonstrates how to use the Pantry .NET client library.</p>
+
+@if (_baskets is {Count: >0})
+{
+    <h3>Baskets:</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var basket in _baskets)
+        {
+            <tr>
+                <td>@basket</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteBasket(basket)">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else if (_baskets is {Count: 0})
+{
+    <h3>No baskets found.</h3>
+
+}
+else
+{
+    <h3>Loading....</h3>
+}
+
+<button class="btn btn-primary" @onclick="AddBasket">ADD BASKET</button>
+
+@code {
+
+    private List<string> _baskets;
+
+    private string PantryId() => _configuration["PantryId"];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var response = await _pantryClient.Pantries.GetPantry(PantryId());
+            _baskets = response.Baskets;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task AddBasket()
+    {
+        var obj = new TestConfig
+        {
+            Prop1 = "ciao",
+            Prop2 = "ciccio",
+        };
+        var basketName = $"basket-{_baskets?.Count ?? 0}";
+        await _pantryClient.Baskets.CreateBasket(PantryId(), basketName, obj);
+
+        if (_baskets is null)
+            _baskets = new List<string>(new[] {basketName});
+        else
+            _baskets.Add(basketName);
+    }
+
+    private async Task DeleteBasket(string name)
+    {
+        await _pantryClient.Baskets.DeleteBasket(PantryId(), name);
+        _baskets.Remove(name);
+    }
+
+    public class TestConfig
+    {
+        public string Prop1 { get; set; }
+        public string Prop2 { get; set; }
+    }
+}
