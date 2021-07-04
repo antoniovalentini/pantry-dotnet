@@ -65,5 +65,10 @@ namespace Pantry.Core
 
             return result ?? default;
         }
+
+        public string GetHttpClientBaseAddress()
+        {
+            return _httpClient.BaseAddress?.AbsoluteUri;
+        }
     }
 }
