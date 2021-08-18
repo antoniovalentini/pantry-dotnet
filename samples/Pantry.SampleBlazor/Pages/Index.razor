@@ -13,27 +13,32 @@
 @if (_baskets is {Count: >0})
 {
     <h3>Baskets:</h3>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var basket in _baskets)
-        {
-            <tr>
-                <td>@basket</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteBasket(basket)">
-                        <span class="oi oi-trash"></span>
-                    </button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var basket in _baskets)
+                {
+                    <tr>
+                        <td>@basket</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteBasket(basket)">
+                                <span class="oi oi-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 }
 else if (_baskets is {Count: 0})
 {
@@ -45,9 +50,25 @@ else
     <h3>Loading....</h3>
 }
 
-<button class="btn btn-primary" @onclick="AddBasket">ADD BASKET</button>
+<div class="row">
+    <div class="col-3">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Basket name..." aria-label="Basket name" aria-describedby="basic-addon2" @bind="_basketName">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" @onclick="AddBasket">CREATE</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <label class="small" style="padding-left: 17px; color: indianred">@_error</label>
+</div>
 
 @code {
+
+    private string _basketName;
+    private string _error;
 
     private List<string> _baskets;
 
@@ -68,29 +89,30 @@ else
 
     private async Task AddBasket()
     {
-        var obj = new TestConfig
+        if (string.IsNullOrWhiteSpace(_basketName))
+        {
+            _error = "Provide a basket name please.";
+            return;
+        }
+
+        var obj = new
         {
             Prop1 = "ciao",
             Prop2 = "ciccio",
         };
-        var basketName = $"basket-{_baskets?.Count ?? 0}";
-        await _pantryClient.Baskets.CreateBasket(PantryId(), basketName, obj);
+        await _pantryClient.Baskets.CreateBasket(PantryId(), _basketName, obj);
 
         if (_baskets is null)
-            _baskets = new List<string>(new[] {basketName});
+            _baskets = new List<string>(new[] {_basketName});
         else
-            _baskets.Add(basketName);
+            _baskets.Add(_basketName);
+
+        _basketName = _error = string.Empty;
     }
 
     private async Task DeleteBasket(string name)
     {
         await _pantryClient.Baskets.DeleteBasket(PantryId(), name);
         _baskets.Remove(name);
-    }
-
-    public class TestConfig
-    {
-        public string Prop1 { get; set; }
-        public string Prop2 { get; set; }
     }
 }
