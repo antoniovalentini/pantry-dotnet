@@ -8,9 +8,9 @@
 
 <h3>Basket: @Id</h3>
 
-@if (SerializedContent is { Length: >0 })
+@if (_serializedContent is { Length: >0 })
 {
-    <textarea class="form-control mb-3" rows="10" @bind="SerializedContent"></textarea>
+    <textarea class="form-control mb-3" rows="10" @bind="_serializedContent"></textarea>
     <div class="row">
         <div class="col-3">
             <div class="input-group mb-3">
@@ -31,7 +31,7 @@ else
     [Parameter]
     public string Id { get; set; }
 
-    public string SerializedContent { get; set; }
+    private string _serializedContent;
 
     private string _message;
 
@@ -42,7 +42,7 @@ else
         try
         {
             var content = await _pantryClient.Baskets.Get<SampleContent>(PantryId(), Id);
-            SerializedContent = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });
+            _serializedContent = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });
         }
         catch (Exception e)
         {
@@ -52,15 +52,18 @@ else
 
     private async Task UpdateBasket()
     {
-        if (string.IsNullOrWhiteSpace(SerializedContent))
+        if (string.IsNullOrWhiteSpace(_serializedContent))
         {
-            _message = $"{nameof(SerializedContent)} is empty.";
+            _message = $"{nameof(_serializedContent)} is empty.";
             return;
         }
 
         try
         {
-            await _pantryClient.Baskets.Update(PantryId(), Id, SerializedContent);
+            var json = await _pantryClient.Baskets.Update(PantryId(), Id, _serializedContent);
+            var jDoc = JsonDocument.Parse(json);
+            _serializedContent = JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
+
         }
         catch (Exception ex)
         {

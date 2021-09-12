@@ -10,7 +10,7 @@ namespace Pantry.Core
         Task PostAsync(string path, HttpContent httpContent);
         Task DeleteAsync(string path);
         Task<TResult> PutAsync<TResult>(string path, HttpContent httpContent);
-        Task PutAsync(string path, HttpContent httpContent);
+        Task<string> PutAsync(string path, HttpContent httpContent);
         public string GetHttpClientBaseAddress();
     }
 }

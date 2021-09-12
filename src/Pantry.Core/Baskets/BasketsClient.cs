@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -39,30 +40,29 @@ namespace Pantry.Core.Baskets
             await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
         }
 
-        public async Task<TResult> Update<TRequest, TResult>(string pantryId, string basketName, TRequest basketContent)
+        public async Task<string> Update(string pantryId, string basketName, string basketContent)
+        {
+            JsonDocument.Parse(basketContent);
+            var httpContent = new StringContent(basketContent, Encoding.UTF8, MediaTypeNames.Application.Json);
+            return await _apiClient.PutAsync($"{pantryId}/basket/{basketName}", httpContent);
+        }
+
+        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent)
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
+
+            if (basketContent is string)
+            {
+                throw new NotSupportedException("string content is not supported by this method.");
+            }
 
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(basketContent),
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
 
-            return await _apiClient.PutAsync<TResult>($"{pantryId}/basket/{basketName}", httpContent);
-        }
-
-        public async Task Update(string pantryId, string basketName, string basketContent)
-        {
-            pantryId.ThrowIfNullOrWhiteSpace();
-            basketName.ThrowIfNullOrWhiteSpace();
-
-            var httpContent = new StringContent(
-                basketContent,
-                Encoding.UTF8,
-                MediaTypeNames.Application.Json);
-
-            await _apiClient.PutAsync($"{pantryId}/basket/{basketName}", httpContent);
+            return await _apiClient.PutAsync<T>($"{pantryId}/basket/{basketName}", httpContent);
         }
 
         public async Task<T> Get<T>(string pantryId, string basketName)

@@ -16,8 +16,17 @@ namespace Pantry.Core.E2ETests.Baskets
         [Fact]
         public async Task UpdateBasket_ShouldSucceed()
         {
-            var response = await _testContext.Client.Update<TestObjectSmall, TestObject>(_testContext.TestSettings.Id, TestContext.UpdateBasketName,
-                new TestObjectSmall { TestProp1 = "not-foo"});
+            // Arrange
+            var content = TestObject.CreateDefault();
+            content.TestProp1 = "not-foo";
+
+            // Act
+            var response = await _testContext.Client.Update(
+                _testContext.TestSettings.Id,
+                TestContext.UpdateBasketName,
+                content);
+
+            // Assert
             Assert.Equal("not-foo", response.TestProp1);
             Assert.Equal("bar", response.TestProp2);
         }
@@ -25,15 +34,19 @@ namespace Pantry.Core.E2ETests.Baskets
         [Fact]
         public async Task UpdateBasket_PlainText_ShouldSucceed()
         {
-            await _testContext.Client.Update(
-                _testContext.TestSettings.Id,
-                TestContext.UpdateBasketName,
-                JsonSerializer.Serialize(new TestObjectSmall { TestProp1 = "not-foo"}) );
-            var response =
-                await _testContext.Client.Get<TestObjectSmall>(
-                    _testContext.TestSettings.Id,
-                    TestContext.UpdateBasketName);
-            Assert.Equal("not-foo", response.TestProp1);
+            // Arrange
+            var content = TestObject.CreateDefault();
+            content.TestProp1 = "not-foo";
+            var serializedContent = JsonSerializer.Serialize(content);
+
+            // Act
+            var response = await _testContext.Client.Update(_testContext.TestSettings.Id, TestContext.UpdateBasketName, serializedContent);
+            var testObject = JsonSerializer.Deserialize<TestObject>(response);
+
+            // Assert
+            Assert.NotNull(testObject);
+            Assert.Equal("not-foo", testObject.TestProp1);
+            Assert.Equal("bar", testObject.TestProp2);
         }
 
         public async Task InitializeAsync()
