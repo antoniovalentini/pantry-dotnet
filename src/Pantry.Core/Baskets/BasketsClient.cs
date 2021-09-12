@@ -14,6 +14,10 @@ namespace Pantry.Core.Baskets
     {
         private readonly IApiClient _apiClient;
 
+        /// <summary>
+        /// Creates a new <see cref="BasketsClient"/> instance.
+        /// </summary>
+        /// <param name="apiClient">The api client instance used to reach Pantry APIs.</param>
         public BasketsClient(IApiClient apiClient)
         {
             _apiClient = apiClient;

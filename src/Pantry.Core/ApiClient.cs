@@ -10,8 +10,9 @@ namespace Pantry.Core
         private readonly HttpClient _httpClient;
 
         /// <summary>
-        /// Creates a new <see cref="ApiClient"/> instance with the provided configuration.
+        /// Creates a new <see cref="ApiClient"/> instance.
         /// </summary>
+        /// <param name="httpClient">The http client to be used.</param>
         public ApiClient(HttpClient httpClient)
         {
             _httpClient = httpClient;

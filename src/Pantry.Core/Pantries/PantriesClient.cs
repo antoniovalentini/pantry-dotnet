@@ -9,16 +9,20 @@ namespace Pantry.Core.Pantries
     /// </summary>
     public class PantriesClient : IPantriesClient
     {
-        private readonly IApiClient _apiclient;
+        private readonly IApiClient _apiClient;
 
-        public PantriesClient(IApiClient apiclient)
+        /// <summary>
+        /// Creates a new <see cref="PantriesClient"/> instance.
+        /// </summary>
+        /// <param name="apiClient">The api client instance used to reach Pantry APIs.</param>
+        public PantriesClient(IApiClient apiClient)
         {
-            _apiclient = apiclient;
+            _apiClient = apiClient;
         }
 
         public async Task<GetPantryResponse> GetPantry(string pantryId)
         {
-            return await _apiclient.GetAsync<GetPantryResponse>(pantryId, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+            return await _apiClient.GetAsync<GetPantryResponse>(pantryId, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
         }
     }
 }
