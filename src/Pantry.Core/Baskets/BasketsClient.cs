@@ -19,7 +19,15 @@ namespace Pantry.Core.Baskets
             _apiClient = apiClient;
         }
 
-        public async Task CreateBasket(string pantryId, string basketName, object basketContent)
+        public async Task<T> Get<T>(string pantryId, string basketName) where T : class
+        {
+            pantryId.ThrowIfNullOrWhiteSpace();
+            basketName.ThrowIfNullOrWhiteSpace();
+
+            return await _apiClient.GetAsync<T>($"{pantryId}/basket/{basketName}");
+        }
+
+        public async Task Create(string pantryId, string basketName, object basketContent)
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
@@ -32,15 +40,7 @@ namespace Pantry.Core.Baskets
             await _apiClient.PostAsync($"{pantryId}/basket/{basketName}", httpContent);
         }
 
-        public async Task DeleteBasket(string pantryId, string basketName)
-        {
-            pantryId.ThrowIfNullOrWhiteSpace();
-            basketName.ThrowIfNullOrWhiteSpace();
-
-            await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
-        }
-
-        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent)  where T : class
+        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent) where T : class
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
@@ -58,12 +58,12 @@ namespace Pantry.Core.Baskets
             return await _apiClient.PutAsync<T>($"{pantryId}/basket/{basketName}", httpContent);
         }
 
-        public async Task<T> Get<T>(string pantryId, string basketName) where T : class
+        public async Task Delete(string pantryId, string basketName)
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
 
-            return await _apiClient.GetAsync<T>($"{pantryId}/basket/{basketName}");
+            await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
         }
     }
 }

@@ -99,7 +99,7 @@ else
 
         var obj = new SampleContent("ciao", "ciccio");
 
-        await _pantryClient.Baskets.CreateBasket(PantryId(), _basketName, obj);
+        await _pantryClient.Baskets.Create(PantryId(), _basketName, obj);
 
         if (_baskets is null)
             _baskets = new List<string>(new[] {_basketName});
@@ -111,7 +111,7 @@ else
 
     private async Task DeleteBasket(string name)
     {
-        await _pantryClient.Baskets.DeleteBasket(PantryId(), name);
+        await _pantryClient.Baskets.Delete(PantryId(), name);
         _baskets.Remove(name);
     }
 

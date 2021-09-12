@@ -21,9 +21,9 @@ namespace Pantry.Core.E2ETests.Baskets
         }
 
         public async Task InitializeAsync() =>
-            await _testContext.Client.CreateBasket(_testContext.TestSettings.Id, TestContext.PermanentBasketName, TestObject.CreateDefault());
+            await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.PermanentBasketName, TestObject.CreateDefault());
 
         public async Task DisposeAsync() =>
-            await _testContext.Client.DeleteBasket(_testContext.TestSettings.Id, TestContext.PermanentBasketName);
+            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.PermanentBasketName);
     }
 }

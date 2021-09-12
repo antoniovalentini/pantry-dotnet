@@ -34,13 +34,13 @@ namespace Pantry.Core.E2ETests.Baskets
         public async Task InitializeAsync()
         {
             // create the to-be-updated one
-            await _testContext.Client.CreateBasket(_testContext.TestSettings.Id, TestContext.UpdateBasketName, TestObject.CreateDefault());
+            await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.UpdateBasketName, TestObject.CreateDefault());
         }
 
         public async Task DisposeAsync()
         {
             // delete the already-updated one
-            await _testContext.Client.DeleteBasket(_testContext.TestSettings.Id, TestContext.UpdateBasketName);
+            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.UpdateBasketName);
         }
     }
 }
