@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Net.Mime;
+using System.Threading;
 
 namespace Pantry.Core.Baskets
 {
@@ -23,15 +24,15 @@ namespace Pantry.Core.Baskets
             _apiClient = apiClient;
         }
 
-        public async Task<T> Get<T>(string pantryId, string basketName) where T : class
+        public async Task<T> Get<T>(string pantryId, string basketName, CancellationToken cancellationToken) where T : class
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
 
-            return await _apiClient.GetAsync<T>($"{pantryId}/basket/{basketName}");
+            return await _apiClient.GetAsync<T>($"{pantryId}/basket/{basketName}", cancellationToken);
         }
 
-        public async Task Create(string pantryId, string basketName, object basketContent)
+        public async Task Create(string pantryId, string basketName, object basketContent, CancellationToken cancellationToken)
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
@@ -41,10 +42,10 @@ namespace Pantry.Core.Baskets
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
 
-            await _apiClient.PostAsync($"{pantryId}/basket/{basketName}", httpContent);
+            await _apiClient.PostAsync($"{pantryId}/basket/{basketName}", httpContent, cancellationToken);
         }
 
-        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent) where T : class
+        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent, CancellationToken cancellationToken) where T : class
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
@@ -59,15 +60,15 @@ namespace Pantry.Core.Baskets
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json);
 
-            return await _apiClient.PutAsync<T>($"{pantryId}/basket/{basketName}", httpContent);
+            return await _apiClient.PutAsync<T>($"{pantryId}/basket/{basketName}", httpContent, cancellationToken);
         }
 
-        public async Task Delete(string pantryId, string basketName)
+        public async Task Delete(string pantryId, string basketName, CancellationToken cancellationToken)
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
 
-            await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
+            await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}", cancellationToken);
         }
     }
 }

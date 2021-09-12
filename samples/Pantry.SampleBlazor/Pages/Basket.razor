@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Configuration
 @using Pantry.Core
 @using System.Text.Json
+@using System.Threading
 @inject IConfiguration _configuration;
 @inject IPantryClient _pantryClient
 
@@ -41,7 +42,7 @@ else
     {
         try
         {
-            var content = await _pantryClient.Baskets.Get<SampleContent>(PantryId(), Id);
+            var content = await _pantryClient.Baskets.Get<SampleContent>(PantryId(), Id, CancellationToken.None);
             _serializedContent = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });
         }
         catch (Exception e)
@@ -60,7 +61,7 @@ else
 
         try
         {
-            var json = await _pantryClient.Baskets.Update(PantryId(), Id, JsonSerializer.Deserialize<SampleContent>(_serializedContent));
+            var json = await _pantryClient.Baskets.Update(PantryId(), Id, JsonSerializer.Deserialize<SampleContent>(_serializedContent), CancellationToken.None);
             _serializedContent = JsonSerializer.Serialize(json, new JsonSerializerOptions { WriteIndented = true });
         }
         catch (Exception ex)

@@ -2,6 +2,7 @@
 
 @using Pantry.Core
 @using Microsoft.Extensions.Configuration
+@using System.Threading
 @inject IPantryClient _pantryClient
 @inject NavigationManager _uriHelper;
 @inject IConfiguration _configuration;
@@ -80,7 +81,7 @@ else
     {
         try
         {
-            var response = await _pantryClient.Pantries.GetPantry(PantryId());
+            var response = await _pantryClient.Pantries.GetPantry(PantryId(), CancellationToken.None);
             _baskets = response.Baskets;
         }
         catch (Exception e)
@@ -99,7 +100,7 @@ else
 
         var obj = new SampleContent("ciao", "ciccio");
 
-        await _pantryClient.Baskets.Create(PantryId(), _basketName, obj);
+        await _pantryClient.Baskets.Create(PantryId(), _basketName, obj, CancellationToken.None);
 
         if (_baskets is null)
             _baskets = new List<string>(new[] {_basketName});
@@ -111,7 +112,7 @@ else
 
     private async Task DeleteBasket(string name)
     {
-        await _pantryClient.Baskets.Delete(PantryId(), name);
+        await _pantryClient.Baskets.Delete(PantryId(), name, CancellationToken.None);
         _baskets.Remove(name);
     }
 

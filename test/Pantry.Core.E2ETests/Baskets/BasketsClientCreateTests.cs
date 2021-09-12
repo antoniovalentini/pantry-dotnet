@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Pantry.Core.E2ETests.Baskets
@@ -16,7 +17,7 @@ namespace Pantry.Core.E2ETests.Baskets
         public async Task CreateBasket_ShouldSucceed()
         {
             var ex = await Record.ExceptionAsync(
-                    async () => await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.CreateBasketName, TestObject.CreateDefault())
+                    async () => await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.CreateBasketName, TestObject.CreateDefault(), CancellationToken.None)
                 );
             Assert.Null(ex);
         }
@@ -26,7 +27,7 @@ namespace Pantry.Core.E2ETests.Baskets
         public async Task DisposeAsync()
         {
             // delete the already-created one
-            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.CreateBasketName);
+            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.CreateBasketName, CancellationToken.None);
         }
     }
 }

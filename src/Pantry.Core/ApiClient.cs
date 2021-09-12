@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pantry.Core
@@ -18,40 +19,40 @@ namespace Pantry.Core
             _httpClient = httpClient;
         }
 
-        public async Task<TResult> GetAsync<TResult>(string path, JsonSerializerOptions serializerOptions = null)
+        public async Task<TResult> GetAsync<TResult>(string path, CancellationToken cancellationToken, JsonSerializerOptions serializerOptions = null)
         {
             path.ThrowIfNullOrWhiteSpace();
 
-            var response = await _httpClient.GetAsync(path);
+            var response = await _httpClient.GetAsync(path, cancellationToken);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error getting the pantry: {response.StatusCode}");
 
-            var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync(cancellationToken);
             return DeserializeAsync<TResult>(json, serializerOptions);
         }
 
-        public async Task PostAsync(string path, HttpContent httpContent)
+        public async Task PostAsync(string path, HttpContent httpContent, CancellationToken cancellationToken)
         {
             path.ThrowIfNullOrWhiteSpace();
 
-            var response = await _httpClient.PostAsync(path, httpContent);
+            var response = await _httpClient.PostAsync(path, httpContent, cancellationToken);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error creating the pantry: {response.StatusCode}");
         }
 
-        public async Task DeleteAsync(string path)
+        public async Task DeleteAsync(string path, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
 
-            var response = await _httpClient.DeleteAsync(path);
+            var response = await _httpClient.DeleteAsync(path, cancellationToken);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error deleting the pantry: {response.StatusCode}");
         }
 
-        public async Task<TResult> PutAsync<TResult>(string path, HttpContent httpContent)
+        public async Task<TResult> PutAsync<TResult>(string path, HttpContent httpContent, CancellationToken cancellationToken)
         {
             path.ThrowIfNullOrWhiteSpace();
-            var response = await _httpClient.PutAsync(path, httpContent);
+            var response = await _httpClient.PutAsync(path, httpContent, cancellationToken);
             if (!response.IsSuccessStatusCode) throw new Exception($"Error updating the pantry: {response.StatusCode}");
 
-            var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync(cancellationToken);
             return DeserializeAsync<TResult>(json);
         }
 

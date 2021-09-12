@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,7 +24,8 @@ namespace Pantry.Core.E2ETests.Baskets
             var response = await _testContext.Client.Update(
                 _testContext.TestSettings.Id,
                 TestContext.UpdateBasketName,
-                content);
+                content,
+                CancellationToken.None);
 
             // Assert
             Assert.Equal("not-foo", response.TestProp1);
@@ -34,13 +35,13 @@ namespace Pantry.Core.E2ETests.Baskets
         public async Task InitializeAsync()
         {
             // create the to-be-updated one
-            await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.UpdateBasketName, TestObject.CreateDefault());
+            await _testContext.Client.Create(_testContext.TestSettings.Id, TestContext.UpdateBasketName, TestObject.CreateDefault(), CancellationToken.None);
         }
 
         public async Task DisposeAsync()
         {
             // delete the already-updated one
-            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.UpdateBasketName);
+            await _testContext.Client.Delete(_testContext.TestSettings.Id, TestContext.UpdateBasketName, CancellationToken.None);
         }
     }
 }
