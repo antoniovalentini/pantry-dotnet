@@ -2,14 +2,12 @@
 
 namespace Pantry.Core.Pantries.Models
 {
-    public class GetPantryResponse
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string ContactEmail { get; set; }
-        public bool Notifications { get; set; }
-        public int PercentFull { get; set; }
-        public List<string> Baskets { get; set; }
-        public List<string> Errors { get; set; }
-    }
+    public record GetPantryResponse(
+        string Name,
+        string Description,
+        string ContactEmail,
+        bool Notifications,
+        int PercentFull,
+        List<string> Baskets,
+        List<string> Errors);
 }
