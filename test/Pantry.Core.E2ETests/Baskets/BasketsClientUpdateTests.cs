@@ -31,24 +31,6 @@ namespace Pantry.Core.E2ETests.Baskets
             Assert.Equal("bar", response.TestProp2);
         }
 
-        [Fact]
-        public async Task UpdateBasket_PlainText_ShouldSucceed()
-        {
-            // Arrange
-            var content = TestObject.CreateDefault();
-            content.TestProp1 = "not-foo";
-            var serializedContent = JsonSerializer.Serialize(content);
-
-            // Act
-            var response = await _testContext.Client.Update(_testContext.TestSettings.Id, TestContext.UpdateBasketName, serializedContent);
-            var testObject = JsonSerializer.Deserialize<TestObject>(response);
-
-            // Assert
-            Assert.NotNull(testObject);
-            Assert.Equal("not-foo", testObject.TestProp1);
-            Assert.Equal("bar", testObject.TestProp2);
-        }
-
         public async Task InitializeAsync()
         {
             // create the to-be-updated one

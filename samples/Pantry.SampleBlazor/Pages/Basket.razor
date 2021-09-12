@@ -60,10 +60,8 @@ else
 
         try
         {
-            var json = await _pantryClient.Baskets.Update(PantryId(), Id, _serializedContent);
-            var jDoc = JsonDocument.Parse(json);
-            _serializedContent = JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
-
+            var json = await _pantryClient.Baskets.Update(PantryId(), Id, JsonSerializer.Deserialize<SampleContent>(_serializedContent));
+            _serializedContent = JsonSerializer.Serialize(json, new JsonSerializerOptions { WriteIndented = true });
         }
         catch (Exception ex)
         {

@@ -40,14 +40,7 @@ namespace Pantry.Core.Baskets
             await _apiClient.DeleteAsync($"{pantryId}/basket/{basketName}");
         }
 
-        public async Task<string> Update(string pantryId, string basketName, string basketContent)
-        {
-            JsonDocument.Parse(basketContent);
-            var httpContent = new StringContent(basketContent, Encoding.UTF8, MediaTypeNames.Application.Json);
-            return await _apiClient.PutAsync($"{pantryId}/basket/{basketName}", httpContent);
-        }
-
-        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent)
+        public async Task<T> Update<T>(string pantryId, string basketName, T basketContent)  where T : class
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
@@ -65,7 +58,7 @@ namespace Pantry.Core.Baskets
             return await _apiClient.PutAsync<T>($"{pantryId}/basket/{basketName}", httpContent);
         }
 
-        public async Task<T> Get<T>(string pantryId, string basketName)
+        public async Task<T> Get<T>(string pantryId, string basketName) where T : class
         {
             pantryId.ThrowIfNullOrWhiteSpace();
             basketName.ThrowIfNullOrWhiteSpace();
