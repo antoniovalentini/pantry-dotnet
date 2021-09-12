@@ -7,7 +7,7 @@ namespace Pantry.Core.E2ETests.Baskets
     public class TestContext
     {
         public readonly PantryTestSettings TestSettings;
-        public readonly BasketsClient Client;
+        public readonly IBasketsClient Client;
         public const string DeleteBasketName = "delete-me";
         public const string CreateBasketName = "create-me";
         public const string PermanentBasketName = "permanent-basket";
