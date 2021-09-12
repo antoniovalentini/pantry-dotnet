@@ -54,15 +54,6 @@ namespace Pantry.Core
             return DeserializeAsync<TResult>(json);
         }
 
-        public async Task<string> PutAsync(string path, HttpContent httpContent)
-        {
-            path.ThrowIfNullOrWhiteSpace();
-            var response = await _httpClient.PutAsync(path, httpContent);
-            if (!response.IsSuccessStatusCode) throw new Exception($"Error updating the pantry: {response.StatusCode}");
-
-            return await response.Content.ReadAsStringAsync();
-        }
-
         private static T DeserializeAsync<T>(string json, JsonSerializerOptions serializerOptions = null)
         {
             json.ThrowIfNullOrWhiteSpace();
