@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Pantry.Core.E2ETests.Baskets
@@ -19,6 +20,20 @@ namespace Pantry.Core.E2ETests.Baskets
                 new TestObjectSmall { TestProp1 = "not-foo"});
             Assert.Equal("not-foo", response.TestProp1);
             Assert.Equal("bar", response.TestProp2);
+        }
+
+        [Fact]
+        public async Task UpdateBasket_PlainText_ShouldSucceed()
+        {
+            await _testContext.Client.Update(
+                _testContext.TestSettings.Id,
+                TestContext.UpdateBasketName,
+                JsonSerializer.Serialize(new TestObjectSmall { TestProp1 = "not-foo"}) );
+            var response =
+                await _testContext.Client.Get<TestObjectSmall>(
+                    _testContext.TestSettings.Id,
+                    TestContext.UpdateBasketName);
+            Assert.Equal("not-foo", response.TestProp1);
         }
 
         public async Task InitializeAsync()

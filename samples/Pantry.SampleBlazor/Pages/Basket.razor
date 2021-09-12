@@ -1,0 +1,80 @@
+﻿@page "/Basket/{id}"
+
+@using Microsoft.Extensions.Configuration
+@using Pantry.Core
+@using System.Text.Json
+@inject IConfiguration _configuration;
+@inject IPantryClient _pantryClient
+
+<h3>Basket: @Id</h3>
+
+@if (SerializedContent is { Length: >0 })
+{
+    <textarea class="form-control mb-3" rows="10" @bind="SerializedContent"></textarea>
+    <div class="row">
+        <div class="col-3">
+            <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="button" @onclick="UpdateBasket">UPDATE</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <label class="small" style="padding-left: 17px;">@_message</label>
+    </div>
+}
+else
+{
+    <h3>Loading....</h3>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public string SerializedContent { get; set; }
+
+    private string _message;
+
+    private string PantryId() => _configuration["PantryId"];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var content = await _pantryClient.Baskets.Get<SampleContent>(PantryId(), Id);
+            SerializedContent = JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task UpdateBasket()
+    {
+        if (string.IsNullOrWhiteSpace(SerializedContent))
+        {
+            _message = $"{nameof(SerializedContent)} is empty.";
+            return;
+        }
+
+        try
+        {
+            await _pantryClient.Baskets.Update(PantryId(), Id, SerializedContent);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            _message = ex.Message;
+            return;
+        }
+        _message = "Success!";
+    }
+
+    public enum Status
+    {
+        None,
+        Success,
+        Error,
+    }
+}

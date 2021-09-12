@@ -31,6 +31,9 @@
                             <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteBasket(basket)">
                                 <span class="oi oi-trash"></span>
                             </button>
+                            <button type="button" class="btn btn-primary btn-sm" @onclick="() => Navigate(basket)">
+                                <span class="oi oi-pencil"></span>
+                            </button>
                         </td>
                     </tr>
                 }
@@ -59,7 +62,6 @@ else
             </div>
         </div>
     </div>
-
 </div>
 <div class="row">
     <label class="small" style="padding-left: 17px; color: indianred">@_error</label>
@@ -95,11 +97,8 @@ else
             return;
         }
 
-        var obj = new
-        {
-            Prop1 = "ciao",
-            Prop2 = "ciccio",
-        };
+        var obj = new SampleContent("ciao", "ciccio");
+
         await _pantryClient.Baskets.CreateBasket(PantryId(), _basketName, obj);
 
         if (_baskets is null)
@@ -114,5 +113,10 @@ else
     {
         await _pantryClient.Baskets.DeleteBasket(PantryId(), name);
         _baskets.Remove(name);
+    }
+
+    private void Navigate(string basket)
+    {
+        _uriHelper.NavigateTo($"/basket/{basket}");
     }
 }

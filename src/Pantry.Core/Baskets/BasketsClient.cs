@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -51,6 +50,19 @@ namespace Pantry.Core.Baskets
                 MediaTypeNames.Application.Json);
 
             return await _apiClient.PutAsync<TResult>($"{pantryId}/basket/{basketName}", httpContent);
+        }
+
+        public async Task Update(string pantryId, string basketName, string basketContent)
+        {
+            pantryId.ThrowIfNullOrWhiteSpace();
+            basketName.ThrowIfNullOrWhiteSpace();
+
+            var httpContent = new StringContent(
+                basketContent,
+                Encoding.UTF8,
+                MediaTypeNames.Application.Json);
+
+            await _apiClient.PutAsync($"{pantryId}/basket/{basketName}", httpContent);
         }
 
         public async Task<T> Get<T>(string pantryId, string basketName)

@@ -7,6 +7,7 @@ namespace Pantry.Core.Baskets
         Task CreateBasket(string pantryId, string basketName, object basketContent);
         Task DeleteBasket(string pantryId, string basketName);
         Task<TResult> Update<TRequest, TResult>(string pantryId, string basketName, TRequest basketContent);
+        Task Update(string pantryId, string basketName, string basketContent);
         Task<T> Get<T>(string pantryId, string basketName);
     }
 }
