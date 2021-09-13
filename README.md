@@ -2,6 +2,7 @@
 ![example workflow](https://github.com/antoniovalentini/pantry-dotnet/actions/workflows/dotnet.yml/badge.svg)
 
 This Pantry Client Library allows .NET developers to easily work with Pantry JSON storage APIs. It is built on top of .NET 5.
+Pantry is a free, API based JSON storage service for personal projects. 
 
 # How to use it
 Use the extension method provided by the `Pantry.Extensions.Microsoft` project to inject all the Pantry services:
@@ -29,9 +30,14 @@ public class MyClass
 
     public async Task MyMethod()
     {
-        // ...
+        // Get a specific pantry
         var pantryResponse = await _pantryClient.Pantries.GetPantry("pantry-id");
-        // ...
+        
+        // Get the content stored inside a basket
+        var content = await _pantryClient.Baskets.Get<SampleContent>(
+            "pantry-id", 
+            "basked-name", 
+            CancellationToken.None);
     }
 }
 ```

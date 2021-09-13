@@ -19,6 +19,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pantry.SampleBlazor", "samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pantry.Extensions.Microsoft.UnitTests", "test\Pantry.Extensions.Microsoft.UnitTests\Pantry.Extensions.Microsoft.UnitTests.csproj", "{2212BAC9-F490-4D8A-892F-72E2DF048A31}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{D93ABE46-E3CD-48B8-AE06-2571A83820A6}"
+ProjectSection(SolutionItems) = preProject
+	global.json = global.json
+	README.md = README.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{0D89D534-E419-4857-8CCC-AB635F2E6023}"
+ProjectSection(SolutionItems) = preProject
+	.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +66,7 @@ Global
 		{4D83C7D9-B137-4BFA-BE49-2A5228AE35E1} = {329944A3-1D56-41FC-96A1-DDEEA2B85718}
 		{AD42627E-BBB0-49A8-AFD1-960335E341DD} = {58338F42-49D6-41C3-AF7E-EAE094E4E43F}
 		{2212BAC9-F490-4D8A-892F-72E2DF048A31} = {303206A1-F0C2-4B6A-93BA-63435BF9E8EC}
+		{0D89D534-E419-4857-8CCC-AB635F2E6023} = {D93ABE46-E3CD-48B8-AE06-2571A83820A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54A62CFA-9057-4541-B530-F8183DFE6378}
