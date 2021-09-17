@@ -4,6 +4,12 @@
 This Pantry Client Library allows .NET developers to easily work with Pantry JSON storage APIs. It is built on top of .NET 5.
 Pantry is a free, API based JSON storage service for personal projects. 
 
+# Disclaimer
+
+This is a fan-made project only and it's not supported by pantry developers. It may be subject to change without notice and it's highly recommended to not store any sensible or secret data. For any further info or to know how your data will be managed, please refer to the [pantry website](https://getpantry.cloud/).
+
+The software is provided “as is”, without warranty of any kind, express or implied. In no event shall the author be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+
 # How to use it
 Use the extension method provided by the `Pantry.Extensions.Microsoft` project to inject all the Pantry services:
 ```C#
@@ -17,7 +23,7 @@ public class Startup
     }
 }
 ```
-and ask the services collection for a `IPantryClient` to get access to `Pantries` and `Baskets` resource endpoints:
+and ask the services collection for an `IPantryClient` to get access to `Pantries` and `Baskets` resource endpoints:
 ```C#
 public class MyClass
 {
